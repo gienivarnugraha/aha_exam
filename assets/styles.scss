@@ -1,0 +1,60 @@
+.theme--dark.v-application {
+  background-color: #181818 !important;
+}
+
+.wrap--text {
+  word-break: break-word;
+}
+
+.subtext {
+  width: 150px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &__title {
+    font-size: 15px;
+  }
+  &__subtitle {
+    font-size: 11px;
+  }
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide--scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.bordered--image {
+  border: 1px solid white;
+  border-radius: 0.5rem;
+  margin-right: 15px;
+}
+.text--end {
+  display: flex !important;
+  align-items: flex-end !important;
+  padding-bottom: 13px !important;
+  text-transform: capitalize !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #181818;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

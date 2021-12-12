@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Will Shown on larger screensize -->
     <v-navigation-drawer
       v-if="$vuetify.breakpoint.lgAndUp"
       permanent
@@ -31,6 +32,8 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
+    <!--Will  Shown on smallest screensize -->
     <v-bottom-navigation
       v-else
       fixed
@@ -61,8 +64,6 @@ export default {
       { title: 'Tags', href: '/tags', icon: 'mdi-view-grid' },
     ],
   }),
-  computed: {},
-  methods: {},
 }
 </script>
 

@@ -48,6 +48,7 @@ export const mutations = {
 }
 
 export const actions = {
+  // * Get all followings list from server
   getAllFollowings({ commit, state }, { page, more = false }) {
     return new Promise((resolve, reject) => {
       this.$axios
@@ -56,20 +57,26 @@ export const actions = {
         )
         .then((response) => {
           resolve(response)
+
+          // *set initial page
           commit('SET_PAGE', {
             key: 'followings',
             value: parseInt(page),
           })
+
+          // * if more page has emitted
           if (more) {
             commit('MORE_ITEMS', {
               key: 'followings',
               value: response.data,
             })
           } else {
+            // * or set initial state
             commit('SET', {
               key: 'followings',
               value: response.data,
             })
+
             commit('TOTAL_ITEMS', {
               key: 'followings',
               value: response.total,
@@ -86,6 +93,7 @@ export const actions = {
     })
   },
 
+  // * Get all followers list from server
   getAllFollowers({ commit, state }, { page, more = false }) {
     return new Promise((resolve, reject) => {
       this.$axios
@@ -94,16 +102,21 @@ export const actions = {
         )
         .then((response) => {
           resolve(response)
+
+          // * set initial page
           commit('SET_PAGE', {
             key: 'followers',
             value: parseInt(page),
           })
+
+          // * if more page has emitted
           if (more) {
             commit('MORE_ITEMS', {
               key: 'followers',
               value: response.data,
             })
           } else {
+            // * or set initial states
             commit('SET', {
               key: 'followers',
               value: response.data,
@@ -125,6 +138,7 @@ export const actions = {
     })
   },
 
+  // * get search results
   getSearchResults({ commit }, { page, pageSize, keyword, more = false }) {
     return new Promise((resolve, reject) => {
       this.$axios
@@ -133,12 +147,15 @@ export const actions = {
         )
         .then((response) => {
           resolve(response)
+
+          // * if more page has emitted
           if (more) {
             commit('MORE_ITEMS', {
               key: 'search',
               value: response.data,
             })
           } else {
+            // * or set initial states
             commit('SET', {
               key: 'search',
               value: response.data,
@@ -159,6 +176,7 @@ export const actions = {
     })
   },
 
+  // * get all tags
   getAllTags({ commit }) {
     return new Promise((resolve, reject) => {
       this.$axios

@@ -88,8 +88,7 @@
 
         <v-btn
           v-if="!isAllLoaded && items.length <= 9"
-          color="white"
-          class="black--text content__button"
+          class="content__button button-contained"
           @click="fetchMore((page += 1))"
           >More</v-btn
         >
@@ -159,6 +158,7 @@ export default {
       const visible = e.target.clientHeight
       const pageHeight = e.target.scrollHeight - 1
 
+      // * detect scroll on bottom page, and fetch more data
       const bottomOfPage = visible + scrollY >= pageHeight
 
       if (bottomOfPage && this.page + 1 <= this.totalPages) {
@@ -202,6 +202,7 @@ export default {
   &__button {
     bottom: 0px;
     width: 100%;
+    text-transform: uppercase !important;
   }
   &__result {
     margin: 0 20px 0;

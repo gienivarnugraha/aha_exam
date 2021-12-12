@@ -85,10 +85,12 @@ export default {
   },
   methods: {
     onScroll(e) {
+      // * is scroll state is on bottom of page
       const bottomOfPage =
         window.innerHeight + window.scrollY >= document.body.offsetHeight
 
       if (bottomOfPage && this.page + 1 <= this.numberOfPages) {
+        // * get rest of the data
         console.log('fetching more tags..')
         this.$store.commit('NEXT_PAGE', 'tags')
       }

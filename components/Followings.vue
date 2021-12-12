@@ -1,6 +1,7 @@
 <template>
   <v-card flat dark color="transparent ">
     <div v-if="loading" style="max-height: 85vh" class="overflow-y-auto">
+      <!-- Skeleton Loader -->
       <v-skeleton-loader
         v-for="(n, index) in perPage"
         :key="index"
@@ -38,9 +39,9 @@
                 x-small
                 height="29px"
                 rounded
-                :outlined="!item.isFollowing"
-                :color="`${item.isFollowing ? 'white' : ''}`"
-                :class="`${item.isFollowing ? 'black--text' : ''}`"
+                :class="`${
+                  item.isFollowing ? 'button-contained' : 'button-outlined'
+                }`"
               >
                 {{ item.isFollowing ? 'Unfollow' : 'Follow' }}
               </v-btn>

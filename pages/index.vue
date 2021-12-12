@@ -40,8 +40,7 @@
 
         <v-divider class="my-8"></v-divider>
         <v-btn
-          color="white"
-          class="black--text content__button"
+          class="content__button button-contained"
           :height="40"
           @click="doSearch"
           >Search</v-btn
@@ -63,15 +62,20 @@ export default {
     page: 0,
   }),
   computed: {
+    // * range value for the slider
     rangeValue() {
+      //* add String 0, because Number will be hidden
       let value = ['0']
       for (let index = 1; index < 50; index++) {
         if (this.$vuetify.breakpoint.smAndDown) {
+          //* reduce label for slider on smaller size, to improve readibility
           value[index * 10] = index * 10
         } else {
           value[index * 3] = index * 3
         }
       }
+
+      // * add last label, because slider steps is 3
       value[50] = 50
       return value
     },
@@ -120,6 +124,7 @@ export default {
 
   &__button {
     position: absolute;
+    text-transform: uppercase !important;
     width: calc(100% - 48px);
     bottom: 90px;
     height: 200px;

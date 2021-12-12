@@ -37,3 +37,12 @@ export default {
 }
 </script>
 
+<style lang="scss">
+// * set tab text to baseline
+.text--end {
+  display: flex !important;
+  align-items: flex-end !important;
+  padding-bottom: 13px !important;
+  text-transform: capitalize !important;
+}
+</style>

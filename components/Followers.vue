@@ -38,9 +38,9 @@
                 x-small
                 height="29px"
                 rounded
-                :outlined="!item.isFollowing"
-                :color="`${item.isFollowing ? 'white' : ''}`"
-                :class="`${item.isFollowing ? 'black--text' : ''}`"
+                :class="`${
+                  item.isFollowing ? 'button-contained' : 'button-outlined'
+                }`"
               >
                 {{ item.isFollowing ? 'Unfollow' : 'Follow' }}
               </v-btn>

@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+    <!-- APPBAR will shown on smaller screens -->
     <v-app-bar
       dark
       dense
@@ -23,6 +24,7 @@
         <span> Home Page </span>
       </v-toolbar-title>
     </v-app-bar>
+
     <Navbar />
     <v-main>
       <Nuxt />

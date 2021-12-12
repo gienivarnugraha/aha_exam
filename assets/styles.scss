@@ -1,11 +1,33 @@
+//  * background color
 .theme--dark.v-application {
   background-color: #181818 !important;
 }
 
-.wrap--text {
-  word-break: break-word;
+// * Button Outlined
+
+.button-outlined {
+  border: solid white 2px !important;
+  color: white !important;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 1) !important;
+    color: black !important;
+  }
 }
 
+// * Button Contained
+.button-contained {
+  background-color: rgba(255, 255, 255, 1) !important;
+  color: black !important;
+
+  &:hover {
+    border: solid white 2px !important;
+    background-color: transparent !important;
+    color: white !important;
+  }
+}
+
+//* subtext for tags and search results
 .subtext {
   width: 150px;
   font-weight: 400;
@@ -26,17 +48,14 @@
   scrollbar-width: none; /* Firefox */
 }
 
+// * bordered image for followers and followings avatars
 .bordered--image {
   border: 1px solid white;
   border-radius: 0.5rem;
   margin-right: 15px;
 }
-.text--end {
-  display: flex !important;
-  align-items: flex-end !important;
-  padding-bottom: 13px !important;
-  text-transform: capitalize !important;
-}
+
+//* Scrollbar properties
 
 /* width */
 ::-webkit-scrollbar {

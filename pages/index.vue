@@ -107,10 +107,10 @@ export default {
 }
 
 .slider-input {
-  font-size: 48px;
-  width: 90px;
+  font-size: 48px !important;
+  width: 90px !important;
   .v-input__control > .v-input__slot > .v-text-field__slot > input {
-    padding: 20px 0;
+    padding: 20px 0 !important;
   }
 }
 

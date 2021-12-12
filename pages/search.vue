@@ -87,7 +87,7 @@
         </v-data-iterator>
 
         <v-btn
-          v-if="!isAllLoaded && !items.length <= 9"
+          v-if="!isAllLoaded && items.length <= 9"
           color="white"
           class="black--text content__button"
           @click="fetchMore((page += 1))"

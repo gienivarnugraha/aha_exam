@@ -1,17 +1,48 @@
-import Store from './store'
-import { createLocalVue } from '@vue/test-utils'
+import _ from 'lodash'
 import Vuex from 'vuex'
-import { cloneDeep } from 'lodash'
+import { createLocalVue } from '@vue/test-utils'
 
-// destructure assign `mutations`
-const localVue = createLocalVue()
-localVue.use(Vuex)
-const store = new Vuex.Store(cloneDeep(Store))
+describe('store/games/games', () => {
+  const localVue = createLocalVue()
+  localVue.use(Vuex)
+  let NuxtStore
+  let store
 
-describe('testing actions', () => {
-  it('get all followers from api', async () => {
-    store.dispatch('getAllFollowers').then((res) => {
-      console.log(res)
+  beforeAll(async () => {
+    const storePath = `${process.env.buildDir}/store.js`
+
+    console.log(storePath)
+    NuxtStore = await import(storePath)
+  })
+
+  beforeEach(async () => {
+    store = await NuxtStore.createStore()
+    console.log(store)
+  })
+
+  describe('getAll', () => {
+    let followers
+    const context = {
+      commit: jest.fn(),
+      state: jest.fn(),
+    }
+    const body = {
+      page: '1',
+    }
+
+    beforeEach(() => {
+      followers = store.actions['getAllFollowers'](context, body)
+    })
+
+    test('DOOM should be on only playStation 4', () => {
+      expect(followers).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            name: 'PlayStation 4',
+            username: 'DOOM',
+          }),
+        ])
+      )
     })
   })
 })

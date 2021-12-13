@@ -152,10 +152,10 @@ export default {
   .content {
     min-width: 800px;
     &__button {
-      width: 343px;
-      bottom: 87px;
-      height: 43px;
-      padding: 13px 16px;
+      width: 343px !important;
+      bottom: 87px !important;
+      height: 43px !important;
+      padding: 13px 16px !important;
     }
     &__form {
       margin: 70px 130px 0;

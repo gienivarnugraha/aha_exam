@@ -2,7 +2,7 @@
   <div>
     <!-- Will Shown on larger screensize -->
     <v-navigation-drawer
-      v-if="$vuetify.breakpoint.lgAndUp"
+      v-if="$vuetify.breakpoint.lgAndUp && !$route.name === 'index'"
       permanent
       touchless
       app

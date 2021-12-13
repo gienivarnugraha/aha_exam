@@ -123,11 +123,10 @@ export default {
   margin-top: -14px;
 
   &__button {
-    position: absolute;
+    position: absolute !important;
     text-transform: uppercase !important;
-    width: calc(100% - 48px);
-    bottom: 90px;
-    height: 200px;
+    width: calc(100% - 48px) !important;
+    bottom: 90px !important;
   }
   &__form {
     height: calc(100vh - 100px);

@@ -1,56 +1,69 @@
 <template>
-  <v-row no-gutters>
-    <v-col class="content">
-      <v-form class="content__form">
-        <p class="content__title headline">Search</p>
-        <v-text-field
-          label="Keyword"
-          outlined
-          v-model="search"
-          solo
-          color="primary"
-        ></v-text-field>
+  <div>
+    <v-row no-gutters>
+      <v-col class="content" align-self="start">
+        <v-form>
+          <div class="content__form">
+            <p class="custom-headline-5-regular content__title">Search</p>
+            <v-text-field
+              label="Keyword"
+              outlined
+              v-model="search"
+              solo
+              hide-details
+              class="search--box"
+              color="primary"
+            ></v-text-field>
 
-        <v-divider v-if="$vuetify.breakpoint.mdAndUp" class="mb-9"></v-divider>
+            <v-divider
+              v-if="$vuetify.breakpoint.mdAndUp"
+              class="mb-8"
+            ></v-divider>
 
-        <p class="headline"># Of Results Per Page</p>
-        <!-- <p style="font-size: 48px">{{ range }}</p> -->
+            <p class="custom-headline-5-regular content__perpage-text">
+              # Of Results Per Page
+            </p>
 
-        <div class="d-inline-flex align-baseline">
-          <v-text-field
-            class="mt-1 mr-2 mb-2 pa-0 slider-input"
-            solo
-            hide-details
-            v-model="range"
-            color="transparent"
-            type="number"
-          ></v-text-field>
-          <p class="text-subtitle-1">Results</p>
-        </div>
-        <v-slider
-          v-model="range"
-          thumb-label
-          :max="50"
-          :min="0"
-          class="slider-custom"
-          track-fill-color="gradient"
-          tick-size="0"
-          :tick-labels="rangeValue"
-        ></v-slider>
+            <div class="d-inline-flex align-baseline content__range">
+              <p class="content__range-text">{{ label[range] }}</p>
+              <span class="custom-subtitle-regular content__result-text"
+                >results</span
+              >
+            </div>
+          </div>
+          <div class="content__slider">
+            <v-slider
+              v-model="range"
+              class="slider-custom"
+              track-fill-color="gradient"
+              thumb-color="#1b1b1b"
+              thumb-size="56px"
+              tick-size="0"
+              hide-details
+              :max="6"
+              :min="0"
+              :step="1"
+              :thumb-label="false"
+              :tick-labels="label"
+            ></v-slider>
+          </div>
 
-        <v-divider class="my-8"></v-divider>
-        <v-btn
-          class="content__button button-contained"
-          :height="40"
-          @click="doSearch"
-          >Search</v-btn
-        >
-      </v-form>
-    </v-col>
-    <v-col style="max-width: 375px" v-if="$vuetify.breakpoint.xl">
-      <Profile />
-    </v-col>
-  </v-row>
+          <div class="content__form">
+            <v-divider class="content__divider"></v-divider>
+            <v-btn
+              class="content__button button-contained custom-button-text"
+              :height="40"
+              @click="doSearch"
+              >Search</v-btn
+            >
+          </div>
+        </v-form>
+      </v-col>
+      <v-col style="max-width: 375px" v-if="$vuetify.breakpoint.xl">
+        <Profile />
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -60,31 +73,17 @@ export default {
     search: '',
     range: 0,
     page: 0,
+    label: [3, 6, 9, 12, 15, 30, 50],
   }),
-  computed: {
-    // * range value for the slider
-    rangeValue() {
-      //* add String 0, because Number will be hidden
-      let value = ['0']
-      for (let index = 1; index < 50; index++) {
-        if (this.$vuetify.breakpoint.smAndDown) {
-          //* reduce label for slider on smaller size, to improve readibility
-          value[index * 10] = index * 10
-        } else {
-          value[index * 3] = index * 3
-        }
-      }
-
-      // * add last label, because slider steps is 3
-      value[50] = 50
-      return value
-    },
-  },
   methods: {
     doSearch() {
       this.$router.push({
         path: 'search',
-        query: { page: 1, pageSize: this.range, keyword: this.search },
+        query: {
+          page: 1,
+          pageSize: this.label[this.range],
+          keyword: this.search,
+        },
       })
     },
   },
@@ -92,12 +91,9 @@ export default {
 </script>
 
 <style lang="scss" >
-.gradient {
-  background: linear-gradient(90deg, #ffd25f, #ff5c01) !important;
-}
-
+// * Vuetify slider custom style
 .slider-custom > .v-input__control > .v-input__slot > .v-slider {
-  margin: 0;
+  // * Vuetify slider track bar custom style
   > .v-slider__track-container {
     .v-slider__track-fill,
     .v-slider__track-background {
@@ -105,64 +101,132 @@ export default {
       background-color: rgba(255, 255, 255, 0.3) !important;
     }
   }
+
+  // * Vuetify slider ticks custom style
   > .v-slider__ticks-container {
-    margin-top: 20px;
+    margin-top: 18px !important;
+  }
+
+  // * Vuetify slider thumb custom style
+  > .v-slider__thumb-container > .v-slider__thumb {
+    height: 26px !important;
+    width: 26px !important;
+    left: -12px !important;
+    border: solid 6px #ffd05d !important;
   }
 }
 
-.slider-input {
+// * Vuetify slider track color
+.gradient {
+  background: linear-gradient(90deg, #ff5c01, #ffd25f) !important;
+}
+
+/* .slider-input {
   font-size: 48px !important;
   width: 90px !important;
   .v-input__control > .v-input__slot > .v-text-field__slot > input {
     padding: 20px 0 !important;
   }
+} */
+
+// * Vuetify text-input custom style
+.search--box {
+  margin-bottom: 29px !important;
+  > .v-input__control > .v-input__slot > .v-text-field__slot > label {
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    letter-spacing: 0.25px !important;
+    line-height: 150% !important;
+    left: 2px !important;
+  }
 }
 
 .content {
-  min-width: 240px;
-  margin-top: -14px;
+  min-width: 240px !important;
+  margin-top: 0 !important;
 
-  &__button {
-    position: absolute !important;
-    text-transform: uppercase !important;
-    width: calc(100% - 48px) !important;
-    bottom: 90px !important;
-  }
-  &__form {
-    height: calc(100vh - 100px);
-    margin: 0 20px 0;
-  }
   &__title {
     margin-bottom: 16px !important;
   }
-}
+  &__form {
+    margin: 71px 20px 0 !important;
+  }
+  &__perpage-text {
+    margin-bottom: 6px !important;
+  }
 
-@media screen and (min-width: 750px) {
-  .content {
-    &__button {
-      bottom: 70px;
-      width: 343px;
-      height: 43px;
-      padding: 13px 16px;
+  &__range {
+    margin-bottom: 2px !important;
+    &-text {
+      margin-bottom: 0 !important;
+      width: 50px !important;
+      font-size: 48px !important;
+      font-weight: 600 !important;
+      line-height: 150% !important;
     }
+  }
+
+  &__result-text {
+    position: relative !important;
+    left: 15px !important;
+    bottom: 3px !important;
+  }
+
+  &__slider {
+    padding: 0 8px !important;
+  }
+
+  &__divider {
+    position: relative !important;
+    top: 172px !important;
+  }
+
+  &__button {
+    position: absolute !important;
+    width: calc(100% - 40px) !important;
+    text-transform: uppercase !important;
+    bottom: 90px !important;
+    left: 8px !important;
   }
 }
 
 @media screen and (min-width: 960px) {
   .content {
     min-width: 800px;
+
     &__button {
       width: 343px !important;
-      bottom: 87px !important;
-      height: 43px !important;
+      bottom: 86px !important;
+      height: 42px !important;
       padding: 13px 16px !important;
+      left: 118px !important;
     }
     &__form {
-      margin: 70px 130px 0;
+      margin: 55px 130px 0 !important;
+    }
+    &__slider {
+      padding: 0 120px 0 124px !important;
     }
     &__title {
-      margin-bottom: 22px !important;
+      margin-bottom: 21px !important;
     }
+
+    &__range {
+      margin-bottom: 4px !important;
+    }
+    &__result-text {
+      bottom: 4px !important;
+      left: 15px !important;
+    }
+  }
+
+  // * Vuetify slider ticks custom style
+  .slider-custom
+    > .v-input__control
+    > .v-input__slot
+    > .v-slider
+    > .v-slider__ticks-container {
+    padding: 0 19px !important;
   }
 }
 </style>

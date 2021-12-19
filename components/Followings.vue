@@ -1,11 +1,14 @@
 <template>
   <v-card flat dark color="transparent ">
-    <div v-if="loading" style="max-height: 85vh" class="overflow-y-auto">
-      <!-- Skeleton Loader -->
+    <div
+      v-if="loading"
+      style="max-height: 88vh; margin-top: 32px !important"
+      class="overflow-y-auto"
+    >
       <v-skeleton-loader
         v-for="(n, index) in perPage"
         :key="index"
-        class="my-2"
+        style="margin-bottom: 13px"
         type="list-item-avatar"
       ></v-skeleton-loader>
     </div>
@@ -14,23 +17,29 @@
         :items="followings"
         :item-height="61"
         v-scroll.self="onScroll"
-        max-height="85vh"
+        max-height="88vh"
       >
         <template v-slot:default="{ item }">
-          <v-list-item class="px-0 mx-0 mt-2">
+          <v-list-item class="follows-content">
             <v-img
               dark
               max-width="40px"
               max-height="40px"
               lazy-src="/loading.svg"
-              class="white--text rounded-lg bordered--image"
               :src="item.avater"
+              class="white--text rounded-lg follows-content__image"
             >
             </v-img>
 
             <v-list-item-content>
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
-              <v-list-item-subtitle>@{{ item.username }}</v-list-item-subtitle>
+              <v-list-item-title
+                class="custom-body-1-text"
+                style="margin-top: 2px"
+                >{{ item.name }}</v-list-item-title
+              >
+              <v-list-item-subtitle class="custom-body-2-text"
+                >@{{ item.username }}</v-list-item-subtitle
+              >
             </v-list-item-content>
 
             <v-list-item-action>
@@ -42,15 +51,16 @@
                 :class="`${
                   item.isFollowing ? 'button-contained' : 'button-outlined'
                 }`"
-              >
-                {{ item.isFollowing ? 'Unfollow' : 'Follow' }}
+                ><span class="custom-follow-button-text">
+                  {{ item.isFollowing ? 'Following' : 'Follow' }}
+                </span>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
         </template>
       </v-virtual-scroll>
       <v-fade-transition>
-        <div v-if="loadMore" class="text-center">
+        <div v-if="infiniteLoad" class="infinite-load">
           <v-progress-circular
             indeterminate
             color="primary"
@@ -66,7 +76,7 @@
 import { mapState } from 'vuex'
 export default {
   data: () => ({
-    loadMore: false,
+    infiniteLoad: false,
     loading: true,
   }),
   computed: {
@@ -101,7 +111,7 @@ export default {
       }
     },
     fetchMore(val) {
-      this.loadMore = true
+      this.infiniteLoad = true
 
       if (val <= this.totalPages) {
         this.$store
@@ -110,10 +120,11 @@ export default {
             more: true,
           })
           .then((res) => {
-            this.loadMore = false
+            this.infiniteLoad = false
           })
       }
     },
   },
 }
 </script>
+

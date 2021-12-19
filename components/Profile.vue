@@ -7,8 +7,9 @@
       color="white"
       mobile-breakpoint="1440"
       height="65px"
+      active-class="tab-text--active"
     >
-      <v-tab v-for="(title, index) in titles" :key="index" class="text--end">
+      <v-tab v-for="(title, index) in titles" :key="index" class="tab-text">
         {{ title }}
       </v-tab>
     </v-tabs>
@@ -39,10 +40,18 @@ export default {
 
 <style lang="scss">
 // * set tab text to baseline
-.text--end {
-  display: flex !important;
-  align-items: flex-end !important;
-  padding-bottom: 13px !important;
+.tab-text {
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  letter-spacing: 0.15px !important;
+  line-height: 150% !important;
   text-transform: capitalize !important;
+
+  position: relative !important;
+  top: 12px !important;
+  left: -2px !important;
+}
+.tab-text--active {
+  font-weight: 700 !important;
 }
 </style>

@@ -1,24 +1,113 @@
-//  * background color
-.theme--dark.v-application {
-  background-color: #181818 !important;
+$background-color: #181818;
+
+$custom-base-font-stack: (
+  caption: (
+    font-family: $body-font-family,
+    font-size: 12px,
+    letter-spacing: 0.4px,
+  ),
+  headline-4: (
+    font-family: $body-font-family,
+    font-size: 30px,
+    letter-spacing: 0.25px,
+  ),
+  headline-5: (
+    font-family: $body-font-family,
+    font-size: 24px,
+  ),
+  subtitle: (
+    font-family: $body-font-family,
+    font-size: 16px,
+    letter-spacing: 0.15px,
+  ),
+  body-1: (
+    font-family: $body-font-family,
+    font-size: 16px,
+    letter-spacing: 0.15px,
+  ),
+  body-2: (
+    font-family: $body-font-family,
+    font-size: 14px,
+    letter-spacing: 0.25px,
+  ),
+  button: (
+    font-size: 14px,
+    letter-spacing: 0,
+  ),
+  follow-button: (
+    font-family: $follows-font,
+    letter-spacing: 0,
+    font-size: 12px,
+  ),
+);
+
+$font-weights: (
+  'regular': 400,
+  'medium': 500,
+  'semi-bold': 600,
+  'bold': 700,
+);
+
+@mixin font($type, $size: regular) {
+  $font-properties: map-get($custom-base-font-stack, $type);
+  $font-weight: map-get($font-weights, $size);
+
+  @each $property, $value in $font-properties {
+    #{$property}: $value !important;
+  }
+  font-weight: $font-weight !important;
+  margin-bottom: 0px !important;
+  line-height: 150% !important;
+}
+
+.custom-caption-regular {
+  @include font(caption, regular);
+}
+.custom-headline-4-regular {
+  @include font(headline-4, regular);
+}
+.custom-headline-4-bold {
+  @include font(headline-4, bold);
+}
+.custom-headline-5-regular {
+  @include font(headline-5, regular);
+}
+.custom-headline-5-bold {
+  @include font(headline-5, bold);
+}
+.custom-subtitle-regular {
+  @include font(subtitle, regular);
+}
+.custom-body-2-regular {
+  @include font(body-2, regular);
+}
+.custom-button-text {
+  @include font(button, bold);
+  text-transform: uppercase !important;
+}
+.custom-follow-button-text {
+  @include font(follow-button, semi-bold);
 }
 
 // * Button Outlined
-
 .button-outlined {
   border: solid white 2px !important;
   color: white !important;
+  padding: 0 8px !important;
+  margin-left: 12px !important;
 
   &:hover {
     background-color: rgba(255, 255, 255, 1) !important;
-    color: black !important;
+    color: $background-color !important;
   }
 }
 
 // * Button Contained
 .button-contained {
   background-color: rgba(255, 255, 255, 1) !important;
-  color: black !important;
+  color: $background-color !important;
+  padding: 0 12px !important;
+  margin-left: 12px !important;
 
   &:hover {
     border: solid white 2px !important;
@@ -27,19 +116,58 @@
   }
 }
 
+.button-responsive {
+  width: 100% !important;
+  height: 43px !important;
+  padding: 13px 16px !important;
+}
+
+.follows-content {
+  margin: 6px 0 0 !important;
+  padding: 0 !important;
+  &__image {
+    // * bordered image for followers and followings avatars
+    border: 2px solid white !important;
+    border-radius: 0.5rem !important;
+    margin-right: 15px !important;
+  }
+}
+
+//* infinite loading
+.infinite-load {
+  position: absolute !important;
+  bottom: 0px !important;
+  margin: auto !important;
+  height: 50px !important;
+  left: 0;
+  right: 0;
+  text-align: center !important;
+  background-color: $background-color !important;
+}
+
 //* subtext for tags and search results
 .subtext {
-  width: 150px;
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: map-get($font-weights, regular) !important;
+  width: 150px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin-bottom: 0 !important;
   &__title {
-    font-size: 15px;
+    font-size: 14.9px !important;
+    letter-spacing: 0.14px !important;
+    line-height: 150% !important;
   }
   &__subtitle {
-    font-size: 11px;
+    font-size: 11.7px !important;
+    letter-spacing: 0.37px !important;
+    line-height: 150% !important;
   }
+}
+
+//  * background color
+.theme--dark.v-application {
+  background-color: $background-color !important;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -48,23 +176,16 @@
   scrollbar-width: none; /* Firefox */
 }
 
-// * bordered image for followers and followings avatars
-.bordered--image {
-  border: 1px solid white;
-  border-radius: 0.5rem;
-  margin-right: 15px;
-}
-
 //* Scrollbar properties
 
 /* width */
 ::-webkit-scrollbar {
-  width: 3px;
+  width: 1px !important;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #181818;
+  background: $background-color !important;
 }
 
 /* Handle */
@@ -76,4 +197,10 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+@media screen and (min-width: 960px) {
+  .button-responsive {
+    width: 343px !important;
+  }
 }

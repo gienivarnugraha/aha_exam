@@ -1,22 +1,31 @@
 <template>
   <v-row no-gutters class="hide--scrollbar">
-    <v-col class="content">
-      <v-card flat color="transparent" class="content__result">
-        <v-btn
-          class="ml-8"
-          text
-          icon
-          @click="back"
-          v-if="!$vuetify.breakpoint.xs"
-          ><v-icon x-large left>mdi-chevron-left</v-icon>
-          <span class="content__title"> Results </span>
-        </v-btn>
-        <span
-          v-else
-          class="headline"
-          :style="`margin-left: ${$vuetify.breakpoint.xs ? 0 : 30}px;`"
-          >Results</span
-        >
+    <v-col class="search-content">
+      <v-card
+        flat
+        color="transparent"
+        class="search-content__result"
+        ref="scrollable"
+      >
+        <div class="search-content--title">
+          <div v-if="!$vuetify.breakpoint.xs">
+            <v-btn
+              class="search-content--title-responsive"
+              text
+              icon
+              @click="back"
+              ><v-icon x-large>mdi-chevron-left</v-icon>
+            </v-btn>
+            <span class="search-content--title__text custom-headline-4-regular">
+              Results
+            </span>
+          </div>
+          <span
+            v-else
+            class="search-content--title__text custom-headline-5-regular"
+            >Results</span
+          >
+        </div>
         <v-data-iterator
           :items="items"
           :loading="loading"
@@ -29,7 +38,7 @@
             mt-7
             overflow-y-auto
           "
-          style="max-height: calc(100vh - 200px)"
+          style="max-height: calc(100vh - 175px)"
           id="scrollable"
           v-scroll.self="onScroll"
         >
@@ -37,16 +46,12 @@
             <div v-for="item in items" :key="item.id">
               <v-card
                 color="rgba(255,255,255, 0.06)"
-                class="content__image"
-                :width="`${$vuetify.breakpoint.mdAndUp ? 219 : 335}px`"
-                :height="`${$vuetify.breakpoint.mdAndUp ? 146 : 222}px`"
+                class="search-content__card"
                 dark
               >
                 <v-img
-                  :width="`${$vuetify.breakpoint.mdAndUp ? 219 : 335}px`"
-                  :height="`${$vuetify.breakpoint.mdAndUp ? 146 : 222}px`"
                   :src="item.avater"
-                  class="grey darken-4"
+                  class="grey darken-4 search-content__image"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -62,12 +67,10 @@
                   </template>
                 </v-img>
 
-                <p class="subtext subtext__title mb-0 mt-3">
+                <p class="subtext subtext__title">
                   {{ item.name }}
                 </p>
-                <p class="subtext subtext__subtitle mb-0">
-                  by {{ item.username }}
-                </p>
+                <p class="subtext subtext__subtitle">by {{ item.username }}</p>
               </v-card>
             </div>
           </template>
@@ -79,25 +82,19 @@
               <v-skeleton-loader
                 v-for="(n, index) in pageSize"
                 :key="index"
-                class="content__image"
+                class="search-content__card"
                 type="card"
               ></v-skeleton-loader>
             </div>
           </template>
         </v-data-iterator>
 
-        <v-btn
-          v-if="!isAllLoaded && items.length <= 9"
-          class="content__button button-contained"
-          @click="fetchMore((page += 1))"
-          >More</v-btn
-        >
         <v-fade-transition>
           <p v-if="isAllLoaded && totalItems > 0">All Items are loaded!</p>
         </v-fade-transition>
 
         <v-fade-transition>
-          <div v-if="loadMore" class="text-center">
+          <div v-if="infiniteLoad" class="infinite-load">
             <v-progress-circular
               indeterminate
               color="primary"
@@ -105,6 +102,13 @@
             ></v-progress-circular>
           </div>
         </v-fade-transition>
+        <v-btn
+          v-if="!loading && !overflown && !isAllLoaded"
+          class="button-responsive button-contained"
+          @click="fetchMore((page += 1))"
+        >
+          <span class="custom-button-text"> More </span>
+        </v-btn>
       </v-card>
     </v-col>
     <v-col style="max-width: 375px" v-if="$vuetify.breakpoint.xl">
@@ -122,7 +126,8 @@ export default {
     pageSize: 1,
     keyword: '',
     loading: true,
-    loadMore: false,
+    infiniteLoad: false,
+    overflown: false,
   }),
   computed: {
     ...mapState({
@@ -138,6 +143,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.isOverflown()
+  },
+
   async fetch() {
     let { page, pageSize, keyword } = this.$route.query
     this.page = parseInt(page)
@@ -150,9 +159,16 @@ export default {
       keyword: keyword,
     })
 
+    await this.$nextTick()
+
     this.loading = false
   },
   methods: {
+    //* detect overflown page
+    isOverflown() {
+      if (this.$refs.scrollable.$el.clientHeight + 140 > window.innerHeight)
+        this.overflown = true
+    },
     onScroll(e) {
       const scrollY = e.target.scrollTop
       const visible = e.target.clientHeight
@@ -167,7 +183,7 @@ export default {
       }
     },
     fetchMore(val) {
-      this.loadMore = true
+      this.infiniteLoad = true
 
       if (val <= this.totalPages) {
         this.$store
@@ -177,8 +193,9 @@ export default {
             keyword: this.keyword,
             more: true,
           })
-          .then((res) => {
-            this.loadMore = false
+          .then(() => {
+            this.isOverflown()
+            this.infiniteLoad = false
           })
       }
     },
@@ -189,58 +206,89 @@ export default {
 }
 </script>
 
-<style lang="scss" >
-.content {
-  min-width: 240px;
-  margin-top: 16px;
-  height: calc(100vh - 100px);
+<style lang="scss">
+button-responsive {
+  bottom: 0px !important;
+}
 
-  .subtext__title {
-    margin-top: 20px !important;
+.subtext__title {
+  margin-top: 22px !important;
+}
+
+.search-content {
+  min-width: 240px !important;
+  margin-top: 86px !important;
+  height: calc(100vh - 200px) !important;
+
+  &--title {
+    margin-left: -20px !important;
+
+    &__text {
+      position: relative !important;
+      top: 4px !important;
+      left: 20px !important;
+      text-transform: capitalize !important;
+    }
   }
 
-  &__button {
-    bottom: 0px;
-    width: 100%;
-    text-transform: uppercase !important;
-  }
   &__result {
-    margin: 0 20px 0;
+    margin: 0 20px 0 !important;
+  }
+
+  &__card {
+    width: 335px !important;
+    height: 222px !important;
+    margin: 0 0 100px !important;
   }
   &__image {
-    width: 335px;
-    height: 222px;
-    margin: 0 0 99px;
+    width: 335px !important;
+    height: 222px !important;
   }
 }
 
 @media screen and (min-width: 960px) {
-  .content {
-    min-width: 800px;
-    margin-top: 24px;
+  .button-responsive {
+    position: relative !important;
+    bottom: 10px !important;
+  }
 
-    .subtext__title {
-      margin-top: 12px !important;
-    }
-
-    &__button {
-      width: 343px;
-      height: 43px;
-      padding: 13px 16px;
-    }
-    &__result {
-      margin: 74px 120px 0;
-    }
-    &__image {
-      width: 219px;
-      height: 146px;
-      margin: 0 12px 82px;
-    }
+  .subtext {
     &__title {
-      margin-left: 14px;
-      font-weight: 400;
-      font-size: 30px;
-      text-transform: capitalize;
+      margin: 13px 0 0 !important;
+    }
+
+    &__subtitle {
+      margin: -1px 0 0 !important;
+    }
+  }
+
+  .search-content {
+    min-width: 800px !important;
+    margin-top: 24px !important;
+
+    &__result {
+      margin: 62px 118px 0 !important;
+    }
+
+    &__card {
+      width: 219px !important;
+      height: 146px !important;
+      margin: 0 12px 82px !important;
+    }
+
+    &__image {
+      width: 219px !important;
+      height: 146px !important;
+    }
+
+    &--title {
+      margin-left: -38px !important;
+
+      &__text {
+        position: relative !important;
+        top: 6px !important;
+        left: 17px !important;
+      }
     }
   }
 }
